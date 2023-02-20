@@ -14,11 +14,21 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.model.Course;
 import com.example.demo.model.Employee;
+import com.example.demo.model.Project;
+import com.example.demo.model.Salary;
+import com.example.demo.model.Student;
+import com.example.demo.repository.CourseRepo;
 import com.example.demo.repository.EmployeeRepo;
+import com.example.demo.repository.ProjectRepo;
+import com.example.demo.repository.SalaryRepo;
+import com.example.demo.repository.StudentRepo;
 
+import ch.qos.logback.core.model.Model;
 import jakarta.validation.Valid;
 
 @RestController
@@ -27,13 +37,49 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeRepo employeeRepo;
 	
-	//Get the all employee
-	@GetMapping(value = {"","/"})
+	 @Autowired
+	private StudentRepo studentRepo;
+	
+	 @Autowired
+	private SalaryRepo salaryRepo;
+	 
+	 @Autowired
+	 private ProjectRepo projectRepo;
+	 
+	 @Autowired
+	 private CourseRepo courseRepo;
+	
+	
+	@GetMapping("/employee")
 	public List<Employee> getEmployees(){
+
 		return this.employeeRepo.findAll();
-		
 	}
 	
+	@GetMapping("/Course")
+	public List<Course> getCourses(){
+
+		return this.courseRepo.findAll();
+	}
+	
+	
+	//get Student detail..
+	@GetMapping("/students")
+	public List<Student> getStudents(){
+		return this.studentRepo.findAll();
+	}
+
+	// get project detail..
+	@GetMapping("/Projects")
+	public List<Project> getProject() {
+		return this.projectRepo.findAll();
+	}
+		
+	//get Salary detail..
+	@GetMapping("/Salary")
+	public List<Salary> getSalary(){
+		return this.salaryRepo.findAll();
+	}
 	
 	//Get the Employee by id
 	@GetMapping("/{id}")
@@ -56,6 +102,7 @@ public class EmployeeController {
 		emp.setEmail(employee.getEmail());	
 		emp.setFirstname(employee.getFirstname());
 		emp.setLastname(employee.getLastname());
+		emp.setSalary(employee.getSalary());
 		
 		return ResponseEntity.ok(this.employeeRepo.save(emp));
 	}
