@@ -37,9 +37,6 @@ public class StudentVo {
 	@Column(name = "Email")
 	private String email;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "salary_id", referencedColumnName = "salary_id")
-    private Salary salary;
 
 
 }

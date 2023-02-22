@@ -24,42 +24,37 @@ import com.example.demo.Model.StudentVo;
 import com.example.demo.Repository.StudentRepo;
 import com.example.demo.Service.StudentService;
 
-import ch.qos.logback.core.model.Model;
+
 import lombok.experimental.var;
 
 
 
 @Controller
-@RestController
-
 public class StudentController {
 	
 	@Autowired
 	public StudentService studentService;
-//	@ResponseBody
+	
+
 
 	@GetMapping("/ViewStudent")
-	public String ViewStudents(ModelMap modelMap,@ModelAttribute("msg") String msg) {
-//		lombok.var my = new ModelAndView();
-//
-//		my.setViewName("ViewStudent");
-//		return my;
-		modelMap.addAttribute("StudentVo",studentService.getStudents());
-		modelMap.addAttribute("msg",msg);
-		return "ViewStudent";
+	public ModelAndView ViewStudent(@ModelAttribute("message") String message,org.springframework.ui.Model model) {
+		ModelAndView view =new ModelAndView("ViewStudent");
+		view.addObject("studentVo",studentService.getStudents());
+		view.addObject("message",message);
+		return view;
 	}
 	
 	@GetMapping("/AddStudent")
-	public String AddStudent(ModelMap modelMap,@ModelAttribute("msg") String msg) {
-		
+	public String AddStudent(ModelMap modelMap,@ModelAttribute("message") String msg) {
 		modelMap.addAttribute("Addstudent",new StudentVo());
-		modelMap.addAttribute("msg",msg);
+		modelMap.addAttribute("message",msg);
 		return "AddStudent";
 	}
 	@PostMapping("/SaveStudent")
 	public String saveStudent(StudentVo studentVo,RedirectAttributes redirectAttributes) {
 		if (studentService.saveOrUpdate(studentVo)) {
-			redirectAttributes.addFlashAttribute("messeage","Data Saved");
+			redirectAttributes.addFlashAttribute("message","Data Saved");
 			return "redirect:/ViewStudent";
 		}
 		else {
@@ -78,11 +73,11 @@ public class StudentController {
 	@PostMapping("/EditSaveStudent")
 	public String EditSaveStudent(StudentVo studentVo,RedirectAttributes redirectAttributes) {
 		if (studentService.saveOrUpdate(studentVo)) {
-			redirectAttributes.addFlashAttribute("messeage","Student Updated");
+			redirectAttributes.addFlashAttribute("message","Student Updated");
 			return "redirect:/ViewStudent";
 		}
 		else {
-			redirectAttributes.addFlashAttribute("messeage","Student not Updated");
+			redirectAttributes.addFlashAttribute("message","Student not Updated");
 			return "redirect:/EditStudent"+studentVo.getStudent_id();
 		}
 	}
@@ -90,10 +85,10 @@ public class StudentController {
 	@GetMapping("/DeleteStudent/{id}")
 	public String DeleteStudent(@PathVariable Long id,RedirectAttributes redirectAttributes) {
 		if (studentService.DeleteStudent(id)) {
-			redirectAttributes.addFlashAttribute("messeage","Student Deleted");
+			redirectAttributes.addFlashAttribute("message","Student Deleted");
 		}
 		
-		redirectAttributes.addFlashAttribute("messeage","Student not Deleted");
+		redirectAttributes.addFlashAttribute("message","Student not Deleted");
 		return "redirect:/ViewStudent";
 		
 	}

@@ -21,6 +21,7 @@ public class StudentService {
 	public List<StudentVo> getStudents(){
 		List<StudentVo> studentVo = new ArrayList<>();
 		studentRepo.findAll().forEach(t -> studentVo.add(t));
+		
 		return studentVo;
 	}
 	
